@@ -1,0 +1,496 @@
+{
+	"info": {
+		"_postman_id": "proyecto-ropa-backend",
+		"name": "ProyectoRopa - E-commerce Backend",
+		"description": "API completa del sistema de e-commerce con microservicios, autenticación OAuth2 y recomendaciones inteligentes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "tokenName",
+				"value": "Keycloak Token",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "http://localhost:8888/realms/app-realm/protocol/openid-connect/token",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "http://localhost:8888/realms/app-realm/protocol/openid-connect/auth",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "gateway-client",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "authorization_code_with_pkce",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "openid profile email",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "https://oauth.pstmn.io/v1/callback",
+				"type": "string"
+			},
+			{
+				"key": "useBrowser",
+				"value": true,
+				"type": "boolean"
+			},
+			{
+				"key": "challengeAlgorithm",
+				"value": "S256",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Home - Get Access Token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/home",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"home"
+							]
+						},
+						"description": "Obtener información del usuario autenticado y copiar el access_token"
+					}
+				},
+				{
+					"name": "Me - User Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"me"
+							]
+						},
+						"description": "Verificar información del usuario autenticado"
+					}
+				}
+			]
+		},
+		{
+			"name": "Productos",
+			"item": [
+				{
+					"name": "Listar Prendas",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/prendas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"prendas"
+							]
+						},
+						"description": "Endpoint público - no requiere autenticación"
+					}
+				},
+				{
+					"name": "Obtener Prenda por ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/prendas/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"prendas",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Prendas por Categoría",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/prendas/categoria/abrigos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"prendas",
+								"categoria",
+								"abrigos"
+							]
+						}
+					}
+				},
+				{
+					"name": "Crear Prenda (ADMIN)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Campera de Invierno\",\n  \"precio_Actual\": 15000.00,\n  \"categoria\": {\n    \"idCategoria\": 1\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/prendas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"prendas"
+							]
+						},
+						"description": "Requiere rol ADMIN"
+					}
+				},
+				{
+					"name": "Actualizar Prenda (ADMIN)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Campera de Invierno Premium\",\n  \"precio_Actual\": 18000.00\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/prendas/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"prendas",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Eliminar Prenda (ADMIN)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/prendas/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"prendas",
+								"1"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Categorías",
+			"item": [
+				{
+					"name": "Listar Categorías",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/categorias",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"categorias"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Clima y Recomendaciones",
+			"item": [
+				{
+					"name": "Actualizar Ubicación Usuario",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"latitude\": -31.4201,\n  \"longitude\": -64.1888,\n  \"ciudad\": \"Córdoba\",\n  \"pais\": \"Argentina\",\n  \"descripcion\": \"Mi ubicación actual\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/clima/ubicacion/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"clima",
+								"ubicacion",
+								"1"
+							]
+						},
+						"description": "Actualizar coordenadas del usuario para obtener clima local. Requiere rol CLIENTE o ADMIN."
+					}
+				},
+				{
+					"name": "Obtener Clima Usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/clima/usuario/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"clima",
+								"usuario",
+								"1"
+							]
+						},
+						"description": "Obtener clima actual basado en la ubicación del usuario"
+					}
+				},
+				{
+					"name": "Obtener Recomendaciones",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/clima/recomendacion/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"clima",
+								"recomendacion",
+								"1"
+							]
+						},
+						"description": "Obtener recomendaciones de ropa según clima actual del usuario"
+					}
+				}
+			]
+		},
+		{
+			"name": "Usuarios (ADMIN)",
+			"item": [
+				{
+					"name": "Listar Usuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"usuarios"
+							]
+						}
+					}
+				},
+				{
+					"name": "Crear Usuario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Juan\",\n  \"apellido\": \"Pérez\",\n  \"email\": \"juan@example.com\",\n  \"direccion\": \"Av. Principal 123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"usuarios"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Compras",
+			"item": [
+				{
+					"name": "Crear Compra",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuario\": {\n    \"idUsuario\": 1\n  },\n  \"items\": [\n    {\n      \"prenda\": {\n        \"idPrenda\": 1\n      },\n      \"cantidad\": 2\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/compras",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"compras"
+							]
+						}
+					}
+				},
+				{
+					"name": "Compras por Usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/compras/usuario/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"compras",
+								"usuario",
+								"1"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Sucursales",
+			"item": [
+				{
+					"name": "Listar Sucursales",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/sucursal",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"sucursal"
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}

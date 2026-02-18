@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL para Keycloak
+  postgres-keycloak:
+    image: postgres:15
+    container_name: postgres-keycloak
+    environment:
+      POSTGRES_DB: ${POSTGRES_KEYCLOAK_DB:-keycloak}
+      POSTGRES_USER: ${POSTGRES_KEYCLOAK_USER:-keycloak}
+      POSTGRES_PASSWORD: ${POSTGRES_KEYCLOAK_PASSWORD:-keycloak}
+    volumes:
+      - postgres-keycloak-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_KEYCLOAK_USER:-keycloak} -d ${POSTGRES_KEYCLOAK_DB:-keycloak}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Keycloak para seguridad
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0
+    container_name: keycloak-auth
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres-keycloak:5432/${POSTGRES_KEYCLOAK_DB:-keycloak}
+      KC_DB_USERNAME: ${POSTGRES_KEYCLOAK_USER:-keycloak}
+      KC_DB_PASSWORD: ${POSTGRES_KEYCLOAK_PASSWORD:-keycloak}
+      KC_HTTP_PORT: 8080
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8888
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_PROXY: edge
+    ports:
+      - "8888:8080"
+    volumes:
+      - keycloak-data:/opt/keycloak/data
+      - ./keycloak/app-realm.json:/opt/keycloak/data/import/app-realm.json
+    command:
+      - start-dev
+      - --import-realm
+    depends_on:
+      postgres-keycloak:
+        condition: service_healthy
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Servicio Producto
+  producto-service:
+    build:
+      context: ./Producto
+      dockerfile: Dockerfile
+    container_name: producto-service
+    environment:
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgre}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+
+
+  # Servicio Compra
+  compra-service:
+    build:
+      context: ./Compra
+      dockerfile: Dockerfile
+    container_name: compra-service
+    environment:
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgre}
+      PRODUCTO_SERVICE_URL: http://producto-service:8081
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # API Gateway
+  gateway-service:
+    build:
+      context: ./Gateway
+      dockerfile: Dockerfile
+    container_name: gateway-service
+    restart: on-failure
+    ports:
+      - "8090:8080"
+    depends_on:
+      - keycloak
+      - producto-service
+      - compra-service
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+    driver: local
+  postgres-keycloak-data:
+    driver: local
+  keycloak-data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,26 @@
+# Environment variables
+.env
+
+# Build outputs
+**/target/
+*.jar
+*.war
+*.class
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Datos de volúmenes Docker (opcional)
+postgres-data/
+keycloak-data/

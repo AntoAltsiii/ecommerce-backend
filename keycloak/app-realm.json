@@ -1,0 +1,49 @@
+{
+  "realm": "app-realm",
+  "enabled": true,
+  "loginTheme": "keycloak",
+  "users": [],
+  "roles": {
+    "realm": [
+      {
+        "name": "ADMIN",
+        "description": "Administrador del sistema"
+      },
+      {
+        "name": "CLIENTE",
+        "description": "Cliente que puede hacer compras"
+      },
+      {
+        "name": "REPARTIDOR",
+        "description": "Repartidor que gestiona envíos"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "gateway-client",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://localhost:8090/login/oauth2/code/keycloak",
+        "http://localhost:8090/*",
+        "http://oauth.pstmn.io/v1/callback",
+        "https://oauth.pstmn.io/v1/callback"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "+",
+        "backchannel.logout.session.required": "true",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      }
+    }
+  ]
+}
