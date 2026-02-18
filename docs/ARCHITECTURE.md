@@ -5,13 +5,7 @@
 ```
 ┌───────────────────────────────────────────────────────────────┐
 │                     CAPA DE PRESENTACIÓN                       │
-│                                                                 │
-│    ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
-│    │ Browser  │  │ Postman  │  │  Mobile  │  │   SPA    │   │
-│    │          │  │          │  │   App    │  │  React   │   │
-│    └─────┬────┘  └─────┬────┘  └─────┬────┘  └─────┬────┘   │
-│          │             │              │             │         │
-└──────────┼─────────────┼──────────────┼─────────────┼─────────┘
+│                                                            
            │             │              │             │
            └─────────────┴──────────────┴─────────────┘
                               │
@@ -125,27 +119,19 @@ Cliente → Gateway
 - **Solución**: Docker DNS resuelve nombres de contenedores
 - **Ejemplo**: `http://producto-service:8081`
 
-### 3. Circuit Breaker (Pendiente)
-- **Problema**: Si un servicio falla, no debe afectar a otros
-- **Solución**: Resilience4j / Spring Cloud Circuit Breaker
-- **Estado**: TODO
 
-### 4. Database per Service
+### 3. Database per Service
 - **Problema**: Acoplamiento de datos entre servicios
 - **Solución**: Cada microservicio tiene su propia BD
 - **Implementación**: 
   - producto_db
   - compra_db
 
-### 5. Centralized Authentication (OAuth2 + PKCE)
+### 4. Centralized Authentication (OAuth2 + PKCE)
 - **Problema**: Cada servicio no debe manejar autenticación
 - **Solución**: Keycloak como Identity Provider
 - **Flujo**: Authorization Code + PKCE
 
-### 6. Client-Side Load Balancing (Pendiente)
-- **Problema**: Escalar instancias de microservicios
-- **Solución**: Spring Cloud LoadBalancer
-- **Estado**: TODO (actualmente 1 instancia por servicio)
 
 ## Decisiones Arquitectónicas
 
@@ -197,14 +183,6 @@ Cliente → Gateway
 ```
 
 ## Escalabilidad Futura
-
-### Horizontal Scaling (Pendiente)
-```yaml
-# docker-compose.yml (futuro)
-producto-service:
-  deploy:
-    replicas: 3  # 3 instancias
-```
 
 ### Caching (Pendiente)
 - Redis para catálogo de productos

@@ -516,35 +516,3 @@ curl http://localhost:8888/realms/app-realm/protocol/openid-connect/certs
 # Obtener nuevo token
 # Ir a http://localhost:8090/home
 ```
-
----
-
-## 🤝 Contribuir
-
-1. Fork el proyecto
-2. Crear rama con tu feature: `git checkout -b feature/AmazingFeature`
-3. Commit tus cambios: `git commit -m 'Add some AmazingFeature'`
-4. Push a la rama: `git push origin feature/AmazingFeature`
-5. Abrir un Pull Request
-
----
-
-## 📄 Licencia
-
-Este proyecto es de código abierto y está disponible bajo la licencia MIT.
-
----
-
-## 👨‍💻 Autor
-
-**Tu Nombre**
-- LinkedIn: [tu-perfil](https://linkedin.com/in/tu-perfil)
-- GitHub: [@tu-usuario](https://github.com/tu-usuario)
-
----
-
-## 🙏 Agradecimientos
-
-- Spring Team por el excelente framework
-- Keycloak por simplificar OAuth2
-- Open-Meteo por la API de clima gratuita
