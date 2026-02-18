@@ -1,0 +1,136 @@
+╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                       ARQUITECTURA E-COMMERCE MICROSERVICES                                    ║
+║                       Spring Boot + Keycloak + Docker                                          ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+
+                                    ┌─────────────────────┐
+                                    │   👤 USUARIO        │
+                                    │   Browser/Cliente   │
+                                    └──────────┬──────────┘
+                                               │
+                                               │ http://localhost:8090
+                                               │
+        ╔══════════════════════════════════════▼═════════════════════════════════════════════════╗
+        ║                         DOCKER NETWORK: app-network                                    ║
+        ║                                                                                        ║
+        ║  ┌─────────────────────────────────────────────────────────────────────────────────┐  ║
+        ║  │                    🌐 API GATEWAY (Spring Cloud Gateway)                        │  ║
+        ║  │                         Port: 8090 → 8080 (WebFlux)                             │  ║
+        ║  │                    OAuth2 Client + Resource Server                              │  ║
+        ║  └─────────────┬────────────────────────────────────────────┬──────────────────────┘  ║
+        ║                │                                            │                          ║
+        ║                │ 1. Login Request (PKCE S256)               │ 4. Authenticated         ║
+        ║                │                                            │    Requests (JWT)        ║
+        ║                ▼                                            ▼                          ║
+        ║  ┌──────────────────────────┐                 ┌─────────────────────────────────┐     ║
+        ║  │   🔐 KEYCLOAK 23.0       │                 │  📦 PRODUCTO MS                 │     ║
+        ║  │   Port: 8081             │                 │  Port: 8082                     │     ║
+        ║  │   Authorization Server   │                 │  Spring Boot 3.2.0              │     ║
+        ║  │   PKCE Flow + JWT        │                 │  OAuth2 Resource Server         │     ║
+        ║  └──────────┬───────────────┘                 │  JPA/Hibernate                  │     ║
+        ║             │                                 └────────┬────────────────────────┘     ║
+        ║             │ 2. OAuth2 Redirect                       │                              ║
+        ║             │                                          │                              ║
+        ║             │ 3. JWT Token                             │ JPA                          ║
+        ║             │                                          │                              ║
+        ║             │                                          │                              ║
+        ║             │                        ┌─────────────────▼────────────────────┐         ║
+        ║             │                        │  🛒 COMPRA MS                        │         ║
+        ║             │                        │  Port: 8083                          │         ║
+        ║             │                        │  Spring Boot 3.2.0                   │         ║
+        ║             │                        │  OAuth2 Resource Server              │         ║
+        ║             │                        │  JPA/Hibernate                       │         ║
+        ║             │                        └─────────┬────────────────────────────┘         ║
+        ║             │                                  │                                       ║
+        ║             │                                  │ RestClient                            ║
+        ║             │                                  │ (inter-service)                       ║
+        ║             │                                  │                                       ║
+        ║             │                                  │ WebClient                             ║
+        ║             │                                  │ (external API)                        ║
+        ║             │                                  ▼                                       ║
+        ║             │                        ┌──────────────────────┐                          ║
+        ║             │                        │  🌦️  OPEN-METEO API  │                          ║
+        ║             │                        │  Weather Service     │                          ║
+        ║             │                        │  (External)          │                          ║
+        ║             │                        └──────────────────────┘                          ║
+        ║             │                                                                          ║
+        ║             │ Auth Data                         JPA/Hibernate                          ║
+        ║             │                                         │                                ║
+        ║             ▼                                         ▼                                ║
+        ║  ┌──────────────────────┐              ┌──────────────────────────────┐               ║
+        ║  │  🗄️  PostgreSQL       │              │  🗄️  PostgreSQL              │               ║
+        ║  │  keycloak DB         │              │  business DB                │               ║
+        ║  │  Port: 5433          │              │  Port: 5432                 │               ║
+        ║  │  (Keycloak data)     │              │  (Productos, Compras, etc.) │               ║
+        ║  └──────────────────────┘              └──────────────────────────────┘               ║
+        ║                                                                                        ║
+        ╚════════════════════════════════════════════════════════════════════════════════════════╝
+
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                    STACK TECNOLÓGICO                                           ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+  🔹 Backend Framework:     Java 17 + Spring Boot 3.2.0
+  🔹 API Gateway:           Spring Cloud Gateway (WebFlux Reactive)
+  🔹 Identity & Access:     Keycloak 23.0 (OAuth2 + PKCE + JWT)
+  🔹 Microservices:         2 servicios independientes (Producto, Compra)
+  🔹 Persistence:           PostgreSQL + Spring Data JPA + Hibernate
+  🔹 Containerization:      Docker + Docker Compose
+  🔹 Security:              OAuth2 Resource Server, Role-based access (ADMIN, USER)
+  🔹 Inter-service Comm:    RestClient (síncrono)
+  🔹 External Integration:  WebClient (Open-Meteo Weather API)
+
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                FLUJO DE AUTENTICACIÓN                                          ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+  1️⃣  Usuario → Gateway (http://localhost:8090)
+      │
+      └──► Login Request con PKCE S256
+
+  2️⃣  Gateway → Keycloak
+      │
+      └──► OAuth2 Authorization Redirect
+
+  3️⃣  Keycloak → Gateway
+      │
+      └──► JWT Token (con roles: ADMIN, USER)
+
+  4️⃣  Gateway → Microservicios
+      │
+      └──► Authenticated Requests con Bearer Token
+
+  5️⃣  Microservicios → PostgreSQL
+      │
+      └──► CRUD operations con JPA/Hibernate
+
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                  PUERTOS Y ENDPOINTS                                           ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+  🌐 Gateway:              http://localhost:8090
+  🔐 Keycloak:             http://localhost:8081
+  📦 Producto Service:     http://localhost:8082 (interno)
+  🛒 Compra Service:       http://localhost:8083 (interno)
+  🗄️  PostgreSQL Business:  localhost:5432
+  🗄️  PostgreSQL Keycloak:  localhost:5433
+
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                    CARACTERÍSTICAS                                             ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+  ✅ Arquitectura de Microservicios desacoplada
+  ✅ API Gateway centralizado para enrutamiento y seguridad
+  ✅ Autenticación OAuth2 con PKCE (más seguro que Authorization Code)
+  ✅ JWT stateless para autorización
+  ✅ Database-per-service pattern
+  ✅ Docker Compose para orquestación
+  ✅ Role-based Access Control (RBAC)
+  ✅ Integración con API externa (Open-Meteo)
+  ✅ Separación de concerns y responsabilidades
+
