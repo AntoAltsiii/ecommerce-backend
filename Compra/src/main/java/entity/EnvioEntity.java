@@ -1,7 +1,5 @@
 package com.proyecto.Compra.entity;
 
-import java.lang.annotation.Inherited;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import com.proyecto.Compra.entity.CompraEntity;
@@ -47,9 +45,9 @@ public class EnvioEntity {
 
     @Column(nullable=false)
     private String fechaEnvio;
-    //fk id compra manytoone
+
     @JsonBackReference("compra-envios")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_compra", nullable=false)
-    private CompraEntity compra; //este envio pertenece a UNA COMPRA
+    private CompraEntity compra;
 }

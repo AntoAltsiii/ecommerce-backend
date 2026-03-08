@@ -56,7 +56,12 @@ public class ItemService {
     public ItemEntity updateItem(Long id, ItemEntity item) {
         ItemEntity itemExistente = itemRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Item no encontrado con id: " + id));
-        
+
+        // Si no se envía prendaId, conservar el existente
+        if (item.getPrendaId() == null) {
+            item.setPrendaId(itemExistente.getPrendaId());
+        }
+
         // Si cambió la prenda, validar que existe
         if (!itemExistente.getPrendaId().equals(item.getPrendaId())) {
             PrendaDTO prenda = productoClient.obtenerPrendaPorId(item.getPrendaId());

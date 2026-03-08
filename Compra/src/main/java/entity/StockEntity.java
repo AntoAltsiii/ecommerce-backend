@@ -1,7 +1,6 @@
 package com.proyecto.Compra.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.proyecto.Compra.entity.SucursalEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,10 +29,16 @@ import lombok.NoArgsConstructor;
 		@Column(nullable=false)
 		private int cantidad;
 
-		//fk prenda
+		// IDs para JSON
+		@Column(name="id_prenda", nullable=false)
+		private Long prendaId; // FK lógica al microservicio Producto
+		
+		@Column(name="id_sucursal")
+		private Long idSucursal;
 
-		@JsonBackReference
+		// Relación JPA (oculta en JSON)
+		@JsonIgnore
 		@ManyToOne(fetch = FetchType.LAZY)
-		@JoinColumn(name="id_sucursal", nullable=false)
+		@JoinColumn(name="id_sucursal", nullable=false, insertable=false, updatable=false)
 		private SucursalEntity sucursal; //este stock pertenece a UNA sucursal
 	}

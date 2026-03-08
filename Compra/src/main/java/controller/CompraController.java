@@ -41,7 +41,7 @@ public class CompraController {
     }
 
     // POST - Crear nueva compra
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     public ResponseEntity<CompraEntity> createCompra(@RequestBody CompraEntity compra) {
         CompraEntity nuevaCompra = compraService.createCompra(compra);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevaCompra);

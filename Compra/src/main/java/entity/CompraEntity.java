@@ -2,7 +2,7 @@ package com.proyecto.Compra.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -37,7 +37,7 @@ public class CompraEntity {
     private String fechaCompra;
     
     @Column(nullable=false)
-    @Enumerated(EnumType.STRING) //enum viene de JPA
+    @Enumerated(EnumType.STRING)
     private EstadoCompra estado;
     
     @Column(nullable=false)
@@ -46,15 +46,16 @@ public class CompraEntity {
     @Column(nullable=false)
     private String tipo;
 
-    @JsonBackReference("usuario-compras")
-    @ManyToOne(fetch = FetchType.LAZY)
+    // @JsonIgnoreProperties evita el loop: muestra usuario pero NO su lista de compras
+    @JsonIgnoreProperties({"compras"})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_Usuario", nullable=false)
-    private UsuarioEntity usuario; //etsa compra pertenece a UN usuario
+    private UsuarioEntity usuario;
 
-    @JsonBackReference("sucursal-compras")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"compras"})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_sucursal", nullable=false)
-    private SucursalEntity sucursal; //etsa compra pertenece a una sucursal
+    private SucursalEntity sucursal;
 
     @JsonManagedReference("compra-envios")
     @OneToMany(
@@ -62,7 +63,7 @@ public class CompraEntity {
         fetch = FetchType.LAZY,
         cascade = CascadeType.ALL
     )
-    private List<EnvioEntity> envios; //una compra TIENE MUHCOS envios
+    private List<EnvioEntity> envios;
 
     @JsonManagedReference("compra-pagos")
     @OneToMany(
@@ -70,7 +71,7 @@ public class CompraEntity {
         fetch = FetchType.LAZY, 
         cascade = CascadeType.ALL
     )
-    private List<PagoEntity> pagos; //una compra TIENE MUHCOS PAGOS
+    private List<PagoEntity> pagos;
 
     @JsonManagedReference("compra-items")
     @OneToMany(
@@ -78,6 +79,6 @@ public class CompraEntity {
         fetch = FetchType.LAZY,
         cascade = CascadeType.ALL
     )
-    private List<ItemEntity> items; //una compra TIENE MUHCOS ITEMS
+    private List<ItemEntity> items;
 
 }

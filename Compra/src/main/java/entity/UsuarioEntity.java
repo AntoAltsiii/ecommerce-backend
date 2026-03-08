@@ -3,7 +3,6 @@ package com.proyecto.Compra.entity;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -47,11 +46,10 @@ public class UsuarioEntity {
     private Double longitude; //en private, para obtener ubicacion de cada usuario de forma privada
 
     @JsonIgnore
-    @JsonManagedReference("usuario-compras")
     @OneToMany(
         mappedBy = "usuario",
         fetch = FetchType.LAZY, 
         cascade = CascadeType.ALL
     )
-    private List<CompraEntity> compras; //un usuario TIENE MUCHAS comrpas
+    private List<CompraEntity> compras;
 }

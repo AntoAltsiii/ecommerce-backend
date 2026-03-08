@@ -11,21 +11,13 @@ import com.proyecto.Compra.repository.StockRepository;
 
 @Service
 public class StockService {
-    
+
     @Autowired
     private StockRepository stockRepository;
 
     // Obtener todos los stocks
     public List<StockEntity> obtenerTodosLosStocks() {
         return stockRepository.findAll();
-    }
-
-    // Obtener stock por ID
-    public Optional<StockEntity> getStockById(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("El ID no puede ser nulo");
-        }
-        return stockRepository.findById(id);
     }
 
     // Crear nuevo stock
@@ -39,8 +31,11 @@ public class StockService {
             .orElseThrow(() -> new RuntimeException("Stock no encontrado con id: " + id));
         
         stockExistente.setCantidad(stock.getCantidad());
-        if (stock.getSucursal() != null) {
-            stockExistente.setSucursal(stock.getSucursal());
+        if (stock.getPrendaId() != null) {
+            stockExistente.setPrendaId(stock.getPrendaId());
+        }
+        if (stock.getIdSucursal() != null) {
+            stockExistente.setIdSucursal(stock.getIdSucursal());
         }
         return stockRepository.save(stockExistente);
     }

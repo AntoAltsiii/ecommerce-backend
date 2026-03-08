@@ -1,7 +1,5 @@
 package com.proyecto.Compra.entity;
 
-import java.lang.annotation.Inherited;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
@@ -38,14 +36,11 @@ public class ItemEntity {
     @Column(nullable=false)
     private Double subtotal;
 
+    @Column(name="id_prenda", nullable=false)
+    private Long prendaId;
+
     @JsonBackReference("compra-items")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_compra", nullable=false)
-    private CompraEntity compra; //item pertenece a UNA compra
-
-    // En microservicios separados: guardamos solo el ID de la prenda
-    // La entidad PrendasEntity vive en el microservicio Producto
-    @Column(name="id_prenda", nullable=false)
-    private Long prendaId; // FK lógica al microservicio Producto
-    
+    private CompraEntity compra;
 }

@@ -3,7 +3,6 @@ package com.proyecto.Compra.entity;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -41,11 +40,10 @@ public class SucursalEntity {
     private String telefonoSucursal;
 
     @JsonIgnore
-    @JsonManagedReference("sucursal-compras")
     @OneToMany(
         mappedBy = "sucursal",
         fetch = FetchType.LAZY,
         cascade = CascadeType.ALL
     )
-    private List<CompraEntity> compras; //una sucursal TIENE MUCHAS compras
+    private List<CompraEntity> compras;
 }
