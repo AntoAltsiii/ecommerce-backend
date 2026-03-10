@@ -1,5 +1,4 @@
-
-package com.proyecto.Compra.service;
+﻿package com.proyecto.Compra.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ public class RecommendationService {
     private ProductoClient productoClient;
 
     public RecommendationDTO getRecommendationForUser(Long userId) {
-    //obtenemos clima dle usuario via weatherService
+
     WeatherDTO weather = weatherService.getWeatherForUser(userId);
 
     Double temp = weather.getCurrent().getTemperature2m();
@@ -33,7 +32,7 @@ public class RecommendationService {
     String condicion;
 
     if (temp < 15) {
-        // Intentar obtener prendas de abrigo (prueba múltiples nombres)
+
         prendas = obtenerPrendasPorTemperatura("frio");
         mensaje = "Hace frío. Te recomendamos ropa abrigada 🧥";
         tiposRecomendados.add("abrigo");
@@ -42,7 +41,7 @@ public class RecommendationService {
         condicion = "Frío";
     }
     else if (temp <= 25) {
-        // Intentar obtener prendas livianas
+
         prendas = obtenerPrendasPorTemperatura("templado");
         mensaje = "Clima templado. Algo liviano está bien 👕";
         tiposRecomendados.add("remera");
@@ -50,7 +49,7 @@ public class RecommendationService {
         condicion = "Templado";
     }
     else {
-        // Intentar obtener prendas de verano
+
         prendas = obtenerPrendasPorTemperatura("calor");
         mensaje = "Hace calor. Usá ropa fresca ☀️";
         tiposRecomendados.add("short");
@@ -59,9 +58,8 @@ public class RecommendationService {
         condicion = "Calor";
     }
 
-    // Convertir prendas a PrendaRecomendada (opcional, solo si quieres incluirlas)
-    List<RecommendationDTO.PrendaRecomendada> prendasRecomendadas = prendas.stream()
-        .limit(5)  // Limitar a 5 prendas
+List<RecommendationDTO.PrendaRecomendada> prendasRecomendadas = prendas.stream()
+        .limit(5)
         .map(p -> RecommendationDTO.PrendaRecomendada.builder()
             .idPrenda(p.getId())
             .nombre(p.getNombre())
@@ -71,8 +69,7 @@ public class RecommendationService {
             .build())
         .toList();
 
-    // Construir pronóstico del día actual
-    RecommendationDTO.PronosticoDia pronostico = null;
+RecommendationDTO.PronosticoDia pronostico = null;
     if (weather.getDaily() != null && !weather.getDaily().getTime().isEmpty()) {
         pronostico = RecommendationDTO.PronosticoDia.builder()
             .fecha(weather.getDaily().getTime().get(0))
@@ -95,42 +92,54 @@ public class RecommendationService {
 }
 
 private List<PrendaDTO> obtenerPrendasPorTemperatura(String tipo) {
-    // Intenta buscar prendas por diferentes categorías según el clima
+
     String[] categoriasPosibles;
-    
+
     if (tipo.equals("frio")) {
-        categoriasPosibles = new String[]{"abrigos", "abrigo", "camperas", "campera", "buzos", "buzo"};
+        categoriasPosibles = new String[]{
+            "abrigos", "abrigo", "camperas", "campera", "buzos", "buzo",
+            "medias", "media", "guantes", "guante", "bufandas", "bufanda",
+            "botas", "bota", "pantalones largos", "pantalon largo", "pantalones", "pantalon",
+            "mangas largas", "manga larga", "gorros", "gorro"
+        };
     } else if (tipo.equals("templado")) {
-        categoriasPosibles = new String[]{"remeras", "remera", "camisas", "camisa", "poleras", "polera"};
+        categoriasPosibles = new String[]{
+            "remeras livianas", "remera liviana", "remeras", "remera",
+            "camisas", "camisa", "livianas", "liviana",
+            "poleras", "polera"
+        };
     } else {
-        categoriasPosibles = new String[]{"shorts", "short", "bermudas", "bermuda", "musculosas", "musculosa"};
+        categoriasPosibles = new String[]{
+            "musculosas", "musculosa", "chulas", "chula",
+            "polleras", "pollera", "shorts", "short",
+            "shorts de jean", "short de jean", "bermudas", "bermuda",
+            "tops", "top", "bikinis", "bikini"
+        };
     }
-    
-    // Intenta buscar con cada categoría posible
-    for (String categoria : categoriasPosibles) {
+
+for (String categoria : categoriasPosibles) {
         try {
             List<PrendaDTO> prendas = productoClient.getProductosByCategoria(categoria);
             if (prendas != null && !prendas.isEmpty()) {
-                return prendas; // Retorna la primera que tenga resultados
+                return prendas;
             }
         } catch (Exception e) {
-            // Si falla, intenta con la siguiente categoría
+
             continue;
         }
     }
-    
-    // Si no encuentra ninguna, retorna lista vacía
-    return new ArrayList<>();
+
+return new ArrayList<>();
 }
 
 private String determinarTipo(Double temp) {
-    if (temp < 15) return "abrigo";
-    else if (temp <= 25) return "remera";
-    else return "short";
+    if (temp < 15) return "frio";
+    else if (temp <= 25) return "templado";
+    else return "calor";
 }
 
 private String obtenerCondicionPorCodigo(Integer codigo) {
-    // Códigos WMO Weather interpretation
+
     if (codigo == 0) return "Despejado";
     if (codigo <= 3) return "Parcialmente nublado";
     if (codigo <= 48) return "Niebla";

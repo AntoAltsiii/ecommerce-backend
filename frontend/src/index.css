@@ -1,0 +1,172 @@
+/**
+ * ========================================
+ * index.css — PALETA DE COLORES Y ESTILOS GLOBALES
+ * ========================================
+ *
+ * PROPÓSITO:
+ * - Define la paleta visual de toda la app en variables CSS (:root)
+ * - Restablece estilos del navegador para consistencia
+ * - Aplica tipografía y colores base al body
+ *
+ * PALETA DE COLORES — Estilo cálido, elegante y minimalista:
+ * --color-bg:          Fondo principal (blanco cálido)
+ * --color-bg-card:     Fondo de tarjetas (blanco puro)
+ * --color-bg-soft:     Fondo secundario (beige muy suave)
+ * --color-border:      Bordes y separadores (beige medio)
+ * --color-text:        Texto principal (marrón oscuro)
+ * --color-text-soft:   Texto secundario (marrón medio, para subtítulos, labels)
+ * --color-gold:        Acento dorado — botones principales, highlights
+ * --color-gold-dark:   Dorado oscuro — hover de botones
+ * --color-danger:      Rojo para "Eliminar" y errores
+ * --color-danger-dark: Rojo oscuro hover
+ * --color-nav-bg:      Fondo de la navbar (marrón oscuro/carbón)
+ *
+ * POR QUÉ VARIABLES CSS:
+ * - Si queremos cambiar un color, lo cambiamos en UN solo lugar
+ * - Todos los componentes que usen var(--color-gold) se actualizan automáticamente
+ * - Facilita la transición a un tema oscuro en el futuro
+ */
+
+/* ========================================
+   VARIABLES GLOBALES (DESIGN TOKENS)
+======================================== */
+:root {
+  /* Fondos */
+  --color-bg:        #FAFAF8;   /* Blanco cálido — fondo de toda la app */
+  --color-bg-card:   #FFFFFF;   /* Blanco puro — tarjetas de productos */
+  --color-bg-soft:   #F2EDE6;   /* Beige claro — secciones, inputs, tags */
+  --color-bg-input:  #FAF7F4;   /* Beige muy suave — fondo de inputs */
+
+  /* Bordes */
+  --color-border:    #E8DDD4;   /* Beige medio — bordes de cards, inputs */
+
+  /* Texto */
+  --color-text:      #2C1A0E;   /* Marrón oscuro — texto principal */
+  --color-text-soft: #7A6152;   /* Marrón medio — subtítulos, labels, placeholders */
+  --color-text-light:#B09080;   /* Marrón claro — texto muy secundario */
+
+  /* Acento dorado — botones principales, precios, highlights */
+  --color-gold:      #C9A84C;
+  --color-gold-dark: #A8883A;
+  --color-gold-light:#F0E0A8;   /* Fondo suave dorado — badges, tags activos */
+
+  /* Peligro — botón eliminar, mensajes de error */
+  --color-danger:    #C0392B;
+  --color-danger-dark:#9B2D20;
+  --color-danger-bg: #FDECEA;
+
+  /* Navbar y elementos oscuros */
+  --color-nav-bg:    #2C1A0E;   /* Marrón oscuro — mismo tono que el texto, unificado */
+  --color-nav-text:  #F2EDE6;   /* Beige claro — texto en la navbar */
+
+  /* Sombras */
+  --shadow-card: 0 2px 8px rgba(44, 26, 14, 0.08);
+  --shadow-card-hover: 0 6px 20px rgba(44, 26, 14, 0.15);
+
+  /* Radios de borde */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+
+  /* Tipografía — Montserrat: elegante, legible, perfecta para moda */
+  font-family: 'Montserrat', 'Georgia', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+
+  color: var(--color-text);
+  background-color: var(--color-bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   RESET Y BASE
+======================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* ========================================
+   TIPOGRAFÍA BASE
+======================================== */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text);
+  font-weight: 600;
+  margin-top: 0;
+  line-height: 1.3;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.2rem; }
+
+p {
+  color: var(--color-text-soft);
+  margin-top: 0;
+}
+
+a {
+  color: var(--color-gold);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-gold-dark);
+}
+
+/* ========================================
+   BOTONES BASE
+   Estilo por defecto limpio — los componentes
+   pueden sobreescribir con clases más específicas
+======================================== */
+button {
+  border-radius: var(--radius-sm);
+  border: none;
+  padding: 0.5em 1.1em;
+  font-size: 0.95em;
+  font-weight: 600;
+  font-family: 'Poppins', 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* ========================================
+   INPUTS BASE
+======================================== */
+input, select, textarea {
+  font-family: inherit;
+  font-size: 0.95rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg-input);
+  color: var(--color-text);
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px var(--color-gold-light);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--color-text-light);
+}
+

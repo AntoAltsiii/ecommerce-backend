@@ -1,4 +1,4 @@
-package com.proyecto.Producto.controller;
+﻿package com.proyecto.Producto.controller;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import com.proyecto.Producto.service.PrendasService;
 @RestController
 @RequestMapping("/api/prendas")
 public class PrendasController {
-    
+
     @Autowired
     private PrendasService prendasService;
 
@@ -34,7 +34,7 @@ public class PrendasController {
     }
     }
 
-    @GetMapping 
+    @GetMapping
     public ResponseEntity<List<PrendasEntity>> obtenerTodasLasPrendas() {
         List<PrendasEntity> prendas = prendasService.obtenerTodasLasPrendas();
         return ResponseEntity.ok(prendas);
@@ -56,12 +56,12 @@ public class PrendasController {
              return ResponseEntity.status(HttpStatus.NOT_FOUND)
                          .body(e.getMessage());
         }
-        
+
      }
 
     @PutMapping("/{id}")
      public ResponseEntity<String> actualizarPrenda(
-        @PathVariable Long id, 
+        @PathVariable Long id,
         @RequestBody PrendasEntity prenda) {
             try {
                 String prendaActualizada = prendasService.actualizarPrenda(id, prenda);

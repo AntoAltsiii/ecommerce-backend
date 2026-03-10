@@ -1,7 +1,7 @@
-package com.proyecto.Compra.entity;
+﻿package com.proyecto.Compra.entity;
 
 public enum EstadoEnvio {
-    PENDIENTE, 
+    PENDIENTE,
     EN_CAMINO,
     ENTREGADO,
     DEVUELTO

@@ -1,4 +1,4 @@
-package com.proyecto.Compra.entity;
+﻿package com.proyecto.Compra.entity;
 
 import java.util.List;
 
@@ -23,32 +23,32 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="tb_usuarios")
 public class UsuarioEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable=false, unique=true)
     private Long idUsuario;
-    
+
     private String nombre;
-    
+
     private String apellido;
-    
+
     @Column(nullable=false, unique=true)
     private String email;
 
     @Column(nullable=false)
     private String direccion;
 
-    @Column(nullable=true)  // Nullable porque no todos los usuarios tienen ubicación inicialmente
+    @Column(nullable=true)
     private Double latitude;
-    
-    @Column(nullable=true)  // Nullable porque no todos los usuarios tienen ubicación inicialmente
-    private Double longitude; //en private, para obtener ubicacion de cada usuario de forma privada
+
+    @Column(nullable=true)
+    private Double longitude;
 
     @JsonIgnore
     @OneToMany(
         mappedBy = "usuario",
-        fetch = FetchType.LAZY, 
+        fetch = FetchType.LAZY,
         cascade = CascadeType.ALL
     )
     private List<CompraEntity> compras;

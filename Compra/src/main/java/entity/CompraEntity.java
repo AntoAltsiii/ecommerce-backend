@@ -1,4 +1,4 @@
-package com.proyecto.Compra.entity;
+﻿package com.proyecto.Compra.entity;
 
 import java.util.List;
 
@@ -28,26 +28,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "tb_compras")
 public class CompraEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCompra;
-    
+
     @Column(nullable=false)
     private String fechaCompra;
-    
+
     @Column(nullable=false)
     @Enumerated(EnumType.STRING)
     private EstadoCompra estado;
-    
+
     @Column(nullable=false)
     private Double totalCompra;
-    
+
     @Column(nullable=false)
     private String tipo;
 
-    // @JsonIgnoreProperties evita el loop: muestra usuario pero NO su lista de compras
-    @JsonIgnoreProperties({"compras"})
+@JsonIgnoreProperties({"compras"})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_Usuario", nullable=false)
     private UsuarioEntity usuario;
@@ -68,7 +67,7 @@ public class CompraEntity {
     @JsonManagedReference("compra-pagos")
     @OneToMany(
         mappedBy="compra",
-        fetch = FetchType.LAZY, 
+        fetch = FetchType.LAZY,
         cascade = CascadeType.ALL
     )
     private List<PagoEntity> pagos;

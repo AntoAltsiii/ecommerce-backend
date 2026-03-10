@@ -1,5 +1,4 @@
-
-package com.proyecto.Compra.dto;
+﻿package com.proyecto.Compra.dto;
 
 import java.util.List;
 
@@ -28,8 +27,7 @@ public class WeatherDTO {
     @JsonProperty("timezone_abbreviation")
     private String timezoneAbbreviation;
 
-    //datos acutales del clima
-    private Current current;
+private Current current;
 
     @JsonProperty("current_units")
     private CurrentUnits currentUnits;
@@ -55,7 +53,7 @@ public class WeatherDTO {
         private Integer relativeHumidity2m;
 
         @JsonProperty("is_day")
-        private Integer isDay; //0=noche, 1=dia 
+        private Integer isDay;
     }
 
     @Data
@@ -67,17 +65,16 @@ public class WeatherDTO {
         private String interval;
 
         @JsonProperty("temperature_2m")
-        private String temperature2m; //C°
+        private String temperature2m;
 
         @JsonProperty("relative_humidity_2m")
-        private String relativeHumidity2m; //%
+        private String relativeHumidity2m;
 
         @JsonProperty("is_day")
-        private String isDay; //0=noche, 1=dia
+        private String isDay;
     }
 
-    //clase interna para pronostico diario
-    @Data
+@Data
     @AllArgsConstructor
     @NoArgsConstructor
 
@@ -85,13 +82,13 @@ public class WeatherDTO {
         private List<String> time;
 
         @JsonProperty("weather_code")
-        private List<Integer> weatherCode;  // [0, 1, 2, 3, ...] códigos WMO
+        private List<Integer> weatherCode;
 
         @JsonProperty("temperature_2m_max")
-        private List<Double> temperature2mMax; // Temperaturas máximas
+        private List<Double> temperature2mMax;
 
         @JsonProperty("temperature_2m_min")
-        private List<Double> temperature2mMin; // Temperaturas mínimas
+        private List<Double> temperature2mMin;
     }
 
     @Data

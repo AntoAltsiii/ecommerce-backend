@@ -1,4 +1,4 @@
-package com.proyecto.Compra.controller;
+﻿package com.proyecto.Compra.controller;
 
 import java.util.List;
 
@@ -20,36 +20,32 @@ import com.proyecto.Compra.service.EnvioService;
 @RestController
 @RequestMapping("/api/envio")
 public class EnvioController {
-    
+
     @Autowired
     private EnvioService envioService;
 
-    // GET - Obtener todos los envíos
-    @GetMapping
+@GetMapping
     public ResponseEntity<List<EnvioEntity>> obtenerTodosLosEnvios() {
         List<EnvioEntity> envios = envioService.obtenerTodosLosEnvios();
         return ResponseEntity.ok(envios);
     }
 
-    // GET - Obtener envío por ID
-    @GetMapping("/{id}")
+@GetMapping("/{id}")
     public ResponseEntity<EnvioEntity> getEnvioById(@PathVariable Long id) {
         return envioService.getEnvioById(id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST - Crear nuevo envío
-    @PostMapping
+@PostMapping
     public ResponseEntity<EnvioEntity> createEnvio(@RequestBody EnvioEntity envio) {
         EnvioEntity nuevoEnvio = envioService.createEnvio(envio);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoEnvio);
     }
 
-    // PUT - Actualizar envío existente
-    @PutMapping("/{id}")
+@PutMapping("/{id}")
     public ResponseEntity<EnvioEntity> updateEnvio(
-            @PathVariable Long id, 
+            @PathVariable Long id,
             @RequestBody EnvioEntity envioDetails) {
         try {
             EnvioEntity envioActualizado = envioService.updateEnvio(id, envioDetails);
@@ -59,8 +55,7 @@ public class EnvioController {
         }
     }
 
-    // DELETE - Eliminar envío
-    @DeleteMapping("/{id}")
+@DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEnvio(@PathVariable Long id) {
         try {
             envioService.deleteEnvio(id);

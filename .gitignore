@@ -1,11 +1,20 @@
-# Environment variables
+# Environment variables — NUNCA subir al repo
 .env
+.env.local
+.env.development
+.env.production
+.env.*.local
 
-# Build outputs
+# Build outputs — Java
 **/target/
 *.jar
 *.war
 *.class
+
+# Build outputs — Frontend
+**/node_modules/
+**/dist/
+**/dist-ssr/
 
 # IDE
 .vscode/
@@ -21,6 +30,6 @@
 .DS_Store
 Thumbs.db
 
-# Datos de volúmenes Docker (opcional)
+# Datos de volúmenes Docker (no versionar)
 postgres-data/
 keycloak-data/

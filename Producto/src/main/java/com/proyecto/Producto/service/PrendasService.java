@@ -1,4 +1,4 @@
-package com.proyecto.Producto.service;
+﻿package com.proyecto.Producto.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +11,7 @@ import com.proyecto.Producto.repository.PrendasRepository;
 
 @Service
 public class PrendasService {
-    
+
     @Autowired
     private PrendasRepository prendasRepository;
 
@@ -34,15 +34,16 @@ public class PrendasService {
 
         prendaExistente.setNombre(prenda.getNombre());
         prendaExistente.setPrecio_Actual(prenda.getPrecio_Actual());
-        prendasRepository.save(prendaExistente);
-        return "Prenda aztualizada exitosamente.";
 
-        //lo que ahcemos aca es traemos la prenda1 pasada por parametro, y luego buscamos
-        //en ala BD dicha prenda, si existe entonces a esa rpenda obtenida orginalemnte
-        //de la BD, le seteamos los valores nuevos de la NUEVA prenda, osea si yo paso la 
-        //prenda "camisa", "30", "3", y la q encuentro en la BD es
-        //prenda "camisa", "25", "5", entonces esa prenda se setea con los nuevos valores
-    }
+        prendaExistente.setImagenUrl(prenda.getImagenUrl());
+
+        if (prenda.getCategoria() != null) {
+            prendaExistente.setCategoria(prenda.getCategoria());
+        }
+        prendasRepository.save(prendaExistente);
+        return "Prenda actualizada exitosamente.";
+
+}
 
     public String eliminarPrenda(Long id) {
         if (!prendasRepository.existsById(id)){

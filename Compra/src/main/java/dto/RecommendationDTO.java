@@ -1,5 +1,4 @@
-
-package com.proyecto.Compra.dto;
+﻿package com.proyecto.Compra.dto;
 
 import java.util.List;
 
@@ -24,14 +23,13 @@ public class RecommendationDTO {
 
     private Boolean esDeDia;
 
-    private List<String> tiposRecomendados;// Ej: ["abrigo", "pantalon_largo", "bufanda"]
+    private List<String> tiposRecomendados;
 
-    private List<PrendaRecomendada> prendas; // OPCIONAL: Lista de prendas específicas del catálogo
+    private List<PrendaRecomendada> prendas;
 
-    private PronosticoDia pronostico;  // Información de pronóstico (opcional)
+    private PronosticoDia pronostico;
 
-
-    @Data
+@Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
@@ -42,18 +40,17 @@ public class RecommendationDTO {
         private String categoria;
         private Double precio;
         private String urlImagen;
-        private String razon; // Explicación de por qué se recomienda esta prenda, ejemplo "dieal para clima frio"
+        private String razon;
     }
 
-    //Clase itnerna para pronositoc resumido
-    @Data
+@Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
     public static class PronosticoDia {
-        private String fecha; // Ej: "2024-06-15"
+        private String fecha;
         private Double tempMaxima;
         private Double tempMinima;
-        private String condicionEsperada; // Ej: "soleado", "lluvioso", etc.
+        private String condicionEsperada;
     }
 }

@@ -2,6 +2,11 @@
   "realm": "app-realm",
   "enabled": true,
   "loginTheme": "keycloak",
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": false,
+  "rememberMe": true,
+  "verifyEmail": false,
+  "defaultRoles": ["CLIENTE"],
   "users": [],
   "roles": {
     "realm": [
@@ -32,10 +37,15 @@
       "redirectUris": [
         "http://localhost:8090/login/oauth2/code/keycloak",
         "http://localhost:8090/*",
+        "http://localhost:5173/*",
+        "http://localhost:3000/*",
         "http://oauth.pstmn.io/v1/callback",
         "https://oauth.pstmn.io/v1/callback"
       ],
       "webOrigins": [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://localhost:8090",
         "*"
       ],
       "attributes": {

@@ -1,5 +1,4 @@
-
-package com.proyecto.Compra.client;
+﻿package com.proyecto.Compra.client;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,7 +24,7 @@ public class WeatherClient {
                         "&timezone=auto",
                         lat, lon)
         .retrieve()
-        .bodyToMono(WeatherDTO.class) //bodytomono signinfica que la respuesta se va a convertir a un objeto de tipo WeatherDTO, y como es una llamada asíncrona, devuelve un Mono<WeatherDTO>
+        .bodyToMono(WeatherDTO.class)
         .block();
     }
 }

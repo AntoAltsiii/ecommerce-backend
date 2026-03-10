@@ -1,4 +1,4 @@
-package com.proyecto.Compra.service;
+﻿package com.proyecto.Compra.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,21 +15,22 @@ public class StockService {
     @Autowired
     private StockRepository stockRepository;
 
-    // Obtener todos los stocks
-    public List<StockEntity> obtenerTodosLosStocks() {
+public List<StockEntity> obtenerTodosLosStocks() {
         return stockRepository.findAll();
     }
 
-    // Crear nuevo stock
-    public StockEntity createStock(StockEntity stock) {
+public Optional<StockEntity> getStockById(Long id) {
+        return stockRepository.findById(id);
+    }
+
+public StockEntity createStock(StockEntity stock) {
         return stockRepository.save(stock);
     }
 
-    // Actualizar stock existente
-    public StockEntity updateStock(Long id, StockEntity stock) {
+public StockEntity updateStock(Long id, StockEntity stock) {
         StockEntity stockExistente = stockRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Stock no encontrado con id: " + id));
-        
+
         stockExistente.setCantidad(stock.getCantidad());
         if (stock.getPrendaId() != null) {
             stockExistente.setPrendaId(stock.getPrendaId());
@@ -40,13 +41,29 @@ public class StockService {
         return stockRepository.save(stockExistente);
     }
 
-    // Eliminar stock
-    public void deleteStock(Long id) {
-        if (!stockRepository.existsById(id)) {
-            throw new RuntimeException("Stock no encontrado con id: " + id);
-        } if (id == null) {
+public void deleteStock(Long id) {
+        if (id == null) {
             throw new IllegalArgumentException("El ID no puede ser nulo");
         }
+        if (!stockRepository.existsById(id)) {
+            throw new RuntimeException("Stock no encontrado con id: " + id);
+        }
         stockRepository.deleteById(id);
+    }
+
+public void descontarStock(Long prendaId, int cantidad) {
+        StockEntity stock = stockRepository.findFirstByPrendaId(prendaId)
+            .orElseThrow(() -> new RuntimeException(
+                "No existe registro de stock para la prenda con id: " + prendaId));
+
+        if (stock.getCantidad() < cantidad) {
+            throw new RuntimeException(
+                "Stock insuficiente para la prenda con id: " + prendaId +
+                ". Disponible: " + stock.getCantidad() +
+                ", solicitado: " + cantidad);
+        }
+
+        stock.setCantidad(stock.getCantidad() - cantidad);
+        stockRepository.save(stock);
     }
 }

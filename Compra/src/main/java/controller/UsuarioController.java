@@ -1,4 +1,4 @@
-package com.proyecto.Compra.controller;
+﻿package com.proyecto.Compra.controller;
 
 import java.util.List;
 
@@ -20,27 +20,31 @@ import com.proyecto.Compra.service.UsuarioService;
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
-    
+
     @Autowired
     private UsuarioService usuarioService;
 
-    // GET - Obtener todos los usuarios
-    @GetMapping
+@GetMapping
     public ResponseEntity<List<UsuarioEntity>> getAllUsuarios() {
         List<UsuarioEntity> usuarios = usuarioService.getAllUsuarios();
         return ResponseEntity.ok(usuarios);
     }
 
-    // GET - Obtener usuario por ID
-    @GetMapping("/{id}")
+@GetMapping("/email/{email}")
+    public ResponseEntity<UsuarioEntity> getUsuarioByEmail(@PathVariable String email) {
+        return usuarioService.getUsuarioByEmail(email)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+    }
+
+@GetMapping("/{id}")
     public ResponseEntity<UsuarioEntity> getUsuarioById(@PathVariable Long id) {
         return usuarioService.getUsuarioById(id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST - Crear nuevo usuario
-    @PostMapping
+@PostMapping
     public ResponseEntity<UsuarioEntity> createUsuario(@RequestBody UsuarioEntity usuario) {
         try {
             UsuarioEntity nuevoUsuario = usuarioService.createUsuario(usuario);
@@ -50,10 +54,9 @@ public class UsuarioController {
         }
     }
 
-    // PUT - Actualizar usuario existente
-    @PutMapping("/{id}")
+@PutMapping("/{id}")
     public ResponseEntity<UsuarioEntity> updateUsuario(
-            @PathVariable Long id, 
+            @PathVariable Long id,
             @RequestBody UsuarioEntity usuarioDetails) {
         try {
             UsuarioEntity usuarioActualizado = usuarioService.updateUsuario(id, usuarioDetails);
@@ -63,8 +66,7 @@ public class UsuarioController {
         }
     }
 
-    // DELETE - Eliminar usuario
-    @DeleteMapping("/{id}")
+@DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) {
         try {
             usuarioService.deleteUsuario(id);

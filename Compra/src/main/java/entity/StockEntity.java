@@ -1,4 +1,4 @@
-package com.proyecto.Compra.entity;
+﻿package com.proyecto.Compra.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 	@NoArgsConstructor
 	@Table(name="tb_stock")
 	public class StockEntity {
-		
+
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private Long idStock;
@@ -29,16 +29,14 @@ import lombok.NoArgsConstructor;
 		@Column(nullable=false)
 		private int cantidad;
 
-		// IDs para JSON
-		@Column(name="id_prenda", nullable=false)
-		private Long prendaId; // FK lógica al microservicio Producto
-		
+@Column(name="id_prenda", nullable=false)
+		private Long prendaId;
+
 		@Column(name="id_sucursal")
 		private Long idSucursal;
 
-		// Relación JPA (oculta en JSON)
-		@JsonIgnore
+@JsonIgnore
 		@ManyToOne(fetch = FetchType.LAZY)
 		@JoinColumn(name="id_sucursal", nullable=false, insertable=false, updatable=false)
-		private SucursalEntity sucursal; //este stock pertenece a UNA sucursal
+		private SucursalEntity sucursal;
 	}

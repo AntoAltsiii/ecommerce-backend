@@ -1,4 +1,4 @@
-package com.proyecto.Producto.entity;
+﻿package com.proyecto.Producto.entity;
 
 import java.util.List;
 
@@ -30,12 +30,12 @@ public class CategoriaEntity {
 
     @Column(nullable = false, unique = true, name = "nombre_categoria")
     private String nombreCategoria;
-    
+
     @JsonManagedReference
     @OneToMany(
         mappedBy = "categoria",
         fetch = FetchType.LAZY,
         cascade = CascadeType.ALL
     )
-    private List<PrendasEntity> prendas; //"Una categoria TIENE MUCHAS prendas"
+    private List<PrendasEntity> prendas;
 }

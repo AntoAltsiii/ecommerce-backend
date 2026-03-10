@@ -1,4 +1,4 @@
-package com.proyecto.Compra.controller;
+﻿package com.proyecto.Compra.controller;
 
 import java.util.List;
 
@@ -20,36 +20,32 @@ import com.proyecto.Compra.service.StockService;
 @RestController
 @RequestMapping("/api/stock")
 public class StockController {
-    
+
     @Autowired
     private StockService stockService;
 
-    // GET - Obtener todos los stocks
-    @GetMapping
+@GetMapping
     public ResponseEntity<List<StockEntity>> obtenerTodosLosStocks() {
         List<StockEntity> stocks = stockService.obtenerTodosLosStocks();
         return ResponseEntity.ok(stocks);
     }
 
-    // GET - Obtener stock por ID
-    @GetMapping("/{id}")
+@GetMapping("/{id}")
     public ResponseEntity<StockEntity> getStockById(@PathVariable Long id) {
         return stockService.getStockById(id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST - Crear nuevo stock
-    @PostMapping
+@PostMapping
     public ResponseEntity<StockEntity> createStock(@RequestBody StockEntity stock) {
         StockEntity nuevoStock = stockService.createStock(stock);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoStock);
     }
 
-    // PUT - Actualizar stock existente
-    @PutMapping("/{id}")
+@PutMapping("/{id}")
     public ResponseEntity<StockEntity> updateStock(
-            @PathVariable Long id, 
+            @PathVariable Long id,
             @RequestBody StockEntity stockDetails) {
         try {
             StockEntity stockActualizado = stockService.updateStock(id, stockDetails);
@@ -59,8 +55,7 @@ public class StockController {
         }
     }
 
-    // DELETE - Eliminar stock
-    @DeleteMapping("/{id}")
+@DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStock(@PathVariable Long id) {
         try {
             stockService.deleteStock(id);

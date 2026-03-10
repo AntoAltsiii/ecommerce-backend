@@ -1,4 +1,4 @@
-package com.proyecto.Compra.entity;
+﻿package com.proyecto.Compra.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="tb_envios")
 public class EnvioEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable=false, unique=true)
@@ -45,6 +45,9 @@ public class EnvioEntity {
 
     @Column(nullable=false)
     private String fechaEnvio;
+
+@Column(name="id_compra", insertable=false, updatable=false)
+    private Long idCompra;
 
     @JsonBackReference("compra-envios")
     @ManyToOne(fetch = FetchType.LAZY)

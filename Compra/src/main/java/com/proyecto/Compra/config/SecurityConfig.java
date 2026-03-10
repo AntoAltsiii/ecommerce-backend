@@ -1,4 +1,4 @@
-package com.proyecto.Compra.config;
+﻿package com.proyecto.Compra.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,12 +15,12 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Endpoints públicos (mismo que Gateway)
+
                 .requestMatchers("/api/sucursal", "/api/sucursal/**").permitAll()
-                // El resto requiere autenticación
+
                 .anyRequest().authenticated()
             )
-            // Validar JWT como Resource Server
+
             .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwt -> jwt.jwtAuthenticationConverter(new JwtAuthenticationConverter()))
             );

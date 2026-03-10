@@ -1,8 +1,8 @@
-package com.proyecto.Compra.entity;
+﻿package com.proyecto.Compra.entity;
 
 public enum EstadoPago {
-    PENDIENTE, 
-    COMPLETADO, 
-    FALLIDO, 
-    REEMBOLSADO    
+    PENDIENTE,
+    COMPLETADO,
+    FALLIDO,
+    REEMBOLSADO
 }

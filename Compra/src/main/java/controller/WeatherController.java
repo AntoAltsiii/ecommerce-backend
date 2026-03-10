@@ -1,5 +1,4 @@
-
-package com.proyecto.Compra.controller;
+﻿package com.proyecto.Compra.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import com.proyecto.Compra.dto.UserLocationDTO;
 import com.proyecto.Compra.service.WeatherService;
 import com.proyecto.Compra.service.RecommendationService;
 
-
 @RestController
 @RequestMapping("/api/clima")
 
@@ -25,11 +23,11 @@ public class WeatherController {
     private WeatherService weatherService;
     @Autowired
     private RecommendationService recommendationService;
-    //endpoins a hacer, acualziar ubiacion del usuario, 2 obtener clima actual del usuario, 3 obtener recomendaciones de ropa
+
     @PutMapping("/ubicacion/{userId}")
     public ResponseEntity<String> updateLocation(@PathVariable Long userId, @RequestBody UserLocationDTO location)
     {
-        //logica para actualizar ubicacion del usuario
+
         weatherService.updateUserLocation(userId, location);
         return ResponseEntity.ok("Ubicación actualizada correctamente");
     }

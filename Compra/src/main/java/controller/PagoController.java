@@ -1,4 +1,4 @@
-package com.proyecto.Compra.controller;
+﻿package com.proyecto.Compra.controller;
 
 import java.util.List;
 
@@ -20,36 +20,32 @@ import com.proyecto.Compra.service.PagoService;
 @RestController
 @RequestMapping("/api/pago")
 public class PagoController {
-    
+
     @Autowired
     private PagoService pagoService;
 
-    // GET - Obtener todos los pagos
-    @GetMapping
+@GetMapping
     public ResponseEntity<List<PagoEntity>> obtenerTodosLosPagos() {
         List<PagoEntity> pagos = pagoService.obtenerTodosLosPagos();
         return ResponseEntity.ok(pagos);
     }
 
-    // GET - Obtener pago por ID
-    @GetMapping("/{id}")
+@GetMapping("/{id}")
     public ResponseEntity<PagoEntity> getPagoById(@PathVariable Long id) {
         return pagoService.getPagoById(id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST - Crear nuevo pago
-    @PostMapping
+@PostMapping
     public ResponseEntity<PagoEntity> createPago(@RequestBody PagoEntity pago) {
         PagoEntity nuevoPago = pagoService.createPago(pago);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPago);
     }
 
-    // PUT - Actualizar pago existente
-    @PutMapping("/{id}")
+@PutMapping("/{id}")
     public ResponseEntity<PagoEntity> updatePago(
-            @PathVariable Long id, 
+            @PathVariable Long id,
             @RequestBody PagoEntity pagoDetails) {
         try {
             PagoEntity pagoActualizado = pagoService.updatePago(id, pagoDetails);
@@ -59,8 +55,7 @@ public class PagoController {
         }
     }
 
-    // DELETE - Eliminar pago
-    @DeleteMapping("/{id}")
+@DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePago(@PathVariable Long id) {
         try {
             pagoService.deletePago(id);

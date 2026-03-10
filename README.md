@@ -154,6 +154,13 @@ Sistema de e-commerce de ropa con **arquitectura de microservicios**, **autentic
 
 ## 🚀 Instalación y Ejecución
 
+### Requisitos
+
+- **Docker Desktop** instalado y corriendo
+- No se necesita Java, Node, ni Maven: Docker lo maneja todo
+
+---
+
 ### 1. Clonar el repositorio
 
 ```bash
@@ -166,60 +173,92 @@ cd ProyectoRopa
 ```bash
 # Copiar el archivo de ejemplo
 cp .env.example .env
-
-# Editar con tus credenciales (IMPORTANTE: cambiar en producción)
-nano .env
 ```
 
-### 3. Compilar los microservicios
+El archivo `.env` ya tiene valores por defecto para desarrollo local. Podés cambiarlos si querés usar contraseñas más seguras.
+
+Para el frontend, las variables también están listas:
+```bash
+# frontend/.env ya existe con los valores correctos para local
+# Si por algún motivo no existe:
+cp frontend/.env.example frontend/.env
+```
+
+### 3. Levantar todo con Docker Compose
 
 ```bash
-# Gateway
-cd Gateway
-mvn clean package -DskipTests
-cd ..
-
-# Producto
-cd Producto
-mvn clean package -DskipTests
-cd ..
-
-# Compra
-cd Compra
-mvn clean package -DskipTests
-cd ..
+# Desde la raíz del proyecto (donde está docker-compose.yml)
+docker compose up --build
 ```
 
-### 4. Levantar todos los servicios con Docker
+> `--build` compila todos los servicios (Java + React). Solo es necesario la primera vez o cuando cambiás código. Las veces siguientes podés usar solo `docker compose up`.
+
+Esto levanta **7 servicios**:
+- `postgres-db` — Base de datos para Producto + Compra
+- `postgres-keycloak` — Base de datos para Keycloak  
+- `keycloak-auth` — Servidor de autenticación
+- `producto-service` — Microservicio de prendas y categorías
+- `compra-service` — Microservicio de compras, stock y envíos
+- `gateway-service` — API Gateway (punto de entrada del backend)
+- `frontend` — App React servida con nginx
+
+### 4. Esperar que los servicios estén listos
+
+Los servicios JVM (Gateway, Producto, Compra) tardan ~60-90 segundos en arrancar. Podés ver los logs con:
 
 ```bash
-docker-compose up -d
+docker compose logs -f
 ```
 
-### 5. Verificar que todo esté corriendo
+Cuando veas `Started GatewayApplication` en los logs, todo está listo.
+
+### 5. Acceder a la aplicación
+
+| Servicio | URL | Descripción |
+|----------|-----|-------------|
+| **🌐 Frontend (App React)** | http://localhost:3000 | Interfaz de usuario |
+| **🔌 API Gateway** | http://localhost:8090 | Entrada del backend |
+| **🔐 Keycloak Admin** | http://localhost:8888 | Panel de administración de auth |
+
+**Keycloak Admin:** usuario `admin` / contraseña `admin`
+
+### 6. Crear un usuario para probar
+
+1. Ir a http://localhost:8888
+2. Login como admin
+3. Seleccionar realm **app-realm**
+4. Ir a **Users → Add user**
+5. Completar nombre de usuario y email
+6. En pestaña **Credentials** → asignar contraseña (desmarcar "Temporary")
+7. En pestaña **Role mapping** → asignar rol **CLIENTE** y/o **ADMIN**
+
+### 7. Cargar datos de ejemplo (opcional)
 
 ```bash
-docker-compose ps
+# Esperar ~90 segundos después de "docker compose up" para que
+# Spring Boot cree las tablas, luego ejecutar:
+docker exec -i postgres-db psql -U postgres < database/seed.sql
 ```
 
-**Deberías ver:**
-```
-NAME                 IMAGE                          STATUS
-postgres-db          postgres:15-alpine             Up (healthy)
-postgres-keycloak    postgres:15                    Up (healthy)
-keycloak-auth        quay.io/keycloak/keycloak:23.0 Up
-producto-service     proyecto-producto              Up
-compra-service       proyecto-compra                Up
-gateway-service      proyecto-gateway               Up
+Esto carga: 5 categorías, 10 prendas con imágenes, 3 sucursales y stock inicial.
+
+---
+
+### Detener los servicios
+
+```bash
+docker compose down
 ```
 
-### 6. Acceder a los servicios
+Los datos persisten en los volúmenes Docker (`postgres-data`, `postgres-keycloak-data`).
 
-| Servicio | URL | Credenciales |
-|----------|-----|--------------|
-| **API Gateway** | http://localhost:8090 | - |
-| **Keycloak Admin** | http://localhost:8888 | admin / admin |
-| **PostgreSQL** | localhost:5432 | postgres / postgres |
+Para también **borrar todos los datos** (empezar de cero):
+
+```bash
+docker compose down -v
+```
+
+> ⚠️ `-v` borra los volúmenes y **todos los datos** (usuarios de Keycloak, prendas, compras). Usalo solo si querés reiniciar completamente.
 
 ---
 

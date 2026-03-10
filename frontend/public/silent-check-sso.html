@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!--
+  ========================================
+  SILENT-CHECK-SSO.HTML — VERIFICACIÓN SILENCIOSA DE SESIÓN
+  ========================================
+
+  PROPÓSITO:
+  - Keycloak necesita este archivo para verificar si el usuario YA tiene
+    una sesión activa sin redirigirlo a la pantalla de login cada vez
+  - Se carga en un iframe invisible en segundo plano cuando la app arranca
+  - Si hay sesión activa → el usuario sigue logueado sin hacer nada
+  - Si no hay sesión → la app arranca normalmente sin mostrar el login
+
+  POR QUÉ EN /public:
+  - La carpeta /public en Vite se sirve tal cual, sin procesar
+  - Keycloak necesita acceder a esta URL: http://localhost:5173/silent-check-sso.html
+  - Como está en /public, Vite lo sirve directamente en esa ruta
+
+  CÓMO FUNCIONA:
+  1. App arranca → keycloak.init() carga este HTML en un iframe oculto
+  2. Este HTML ejecuta postMessage → le dice al padre (tu app) el resultado
+  3. Keycloak procesa ese resultado y sabe si hay sesión o no
+  4. Todo esto pasa en milisegundos, el usuario no ve nada
+-->
+<html>
+  <body>
+    <script>
+      // Este script le comunica al iframe padre (la app React) el resultado
+      // de la verificación de sesión. Es el mecanismo estándar de Keycloak.
+      parent.postMessage(location.href, location.origin);
+    </script>
+  </body>
+</html>

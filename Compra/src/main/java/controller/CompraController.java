@@ -1,10 +1,9 @@
-package com.proyecto.Compra.controller;
+﻿package com.proyecto.Compra.controller;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,36 +20,38 @@ import com.proyecto.Compra.service.CompraService;
 @RestController
 @RequestMapping("/api/compras")
 public class CompraController {
-    
+
     @Autowired
     private CompraService compraService;
 
-    // GET - Obtener todas las compras
-    @GetMapping
+@GetMapping
     public ResponseEntity<List<CompraEntity>> obtenerTodasLasCompras() {
         List<CompraEntity> compras = compraService.obtenerTodasLasCompras();
         return ResponseEntity.ok(compras);
     }
 
-    // GET - Obtener compra por ID
-    @GetMapping("/{id}")
+@GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<List<CompraEntity>> getComprasByUsuario(@PathVariable Long usuarioId) {
+        List<CompraEntity> compras = compraService.getComprasByUsuarioId(usuarioId);
+        return ResponseEntity.ok(compras);
+    }
+
+@GetMapping("/{id}")
     public ResponseEntity<CompraEntity> getCompraById(@PathVariable Long id) {
         return compraService.getCompraById(id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST - Crear nueva compra
-    @PostMapping
+@PostMapping
     public ResponseEntity<CompraEntity> createCompra(@RequestBody CompraEntity compra) {
         CompraEntity nuevaCompra = compraService.createCompra(compra);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevaCompra);
     }
 
-    // PUT - Actualizar compra existente
-    @PutMapping("/{id}")
+@PutMapping("/{id}")
     public ResponseEntity<CompraEntity> updateCompra(
-            @PathVariable Long id, 
+            @PathVariable Long id,
             @RequestBody CompraEntity compraDetails) {
         try {
             CompraEntity compraActualizada = compraService.updateCompra(id, compraDetails);
@@ -60,8 +61,7 @@ public class CompraController {
         }
     }
 
-    // DELETE - Eliminar compra
-    @DeleteMapping("/{id}")
+@DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCompra(@PathVariable Long id) {
         try {
             compraService.deleteCompra(id);

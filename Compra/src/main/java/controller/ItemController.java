@@ -1,4 +1,4 @@
-package com.proyecto.Compra.controller;
+﻿package com.proyecto.Compra.controller;
 
 import java.util.List;
 
@@ -20,36 +20,32 @@ import com.proyecto.Compra.service.ItemService;
 @RestController
 @RequestMapping("/api/item")
 public class ItemController {
-    
+
     @Autowired
     private ItemService itemService;
 
-    // GET - Obtener todos los items
-    @GetMapping
+@GetMapping
     public ResponseEntity<List<ItemEntity>> obtenerTodosLosItems() {
         List<ItemEntity> items = itemService.obtenerTodosLosItems();
         return ResponseEntity.ok(items);
     }
 
-    // GET - Obtener item por ID
-    @GetMapping("/{id}")
+@GetMapping("/{id}")
     public ResponseEntity<ItemEntity> getItemById(@PathVariable Long id) {
         return itemService.getItemById(id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST - Crear nuevo item
-    @PostMapping
+@PostMapping
     public ResponseEntity<ItemEntity> createItem(@RequestBody ItemEntity item) {
         ItemEntity nuevoItem = itemService.createItem(item);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoItem);
     }
 
-    // PUT - Actualizar item existente
-    @PutMapping("/{id}")
+@PutMapping("/{id}")
     public ResponseEntity<ItemEntity> updateItem(
-            @PathVariable Long id, 
+            @PathVariable Long id,
             @RequestBody ItemEntity itemDetails) {
         try {
             ItemEntity itemActualizado = itemService.updateItem(id, itemDetails);
@@ -59,8 +55,7 @@ public class ItemController {
         }
     }
 
-    // DELETE - Eliminar item
-    @DeleteMapping("/{id}")
+@DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         try {
             itemService.deleteItem(id);

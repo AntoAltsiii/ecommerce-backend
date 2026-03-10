@@ -1,4 +1,4 @@
-package com.proyecto.Compra.repository;
+﻿package com.proyecto.Compra.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -7,5 +7,5 @@ import com.proyecto.Compra.entity.ItemEntity;
 
 	@Repository
 	public interface ItemRepository extends JpaRepository<ItemEntity, Long>{
-    
+
 	}

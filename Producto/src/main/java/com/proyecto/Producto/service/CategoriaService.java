@@ -1,4 +1,4 @@
-package com.proyecto.Producto.service;
+﻿package com.proyecto.Producto.service;
 
 import java.util.List;
 
@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.proyecto.Producto.entity.CategoriaEntity;
 import com.proyecto.Producto.repository.CategoriaRepository;
-
 
 @Service
 public class CategoriaService {
@@ -28,10 +27,8 @@ public class CategoriaService {
     }
 
     public List<CategoriaEntity> obtenerTodasLasCategorias() {
-        if (categoriaRepository.count() == 0) {
-            throw new RuntimeException("No hay categorias en el sistema.");
-        }
-        return categoriaRepository.findAll();
+
+return categoriaRepository.findAll();
     }
 
     public String eliminarCategoria(Long idCategoria) {

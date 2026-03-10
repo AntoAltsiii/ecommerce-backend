@@ -1,4 +1,4 @@
-package com.proyecto.Compra.service;
+﻿package com.proyecto.Compra.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,32 +11,27 @@ import com.proyecto.Compra.repository.EnvioRepository;
 
 @Service
 public class EnvioService {
-    
+
     @Autowired
     private EnvioRepository envioRepository;
 
-    // Obtener todos los envíos
-    public List<EnvioEntity> obtenerTodosLosEnvios() {
+public List<EnvioEntity> obtenerTodosLosEnvios() {
         return envioRepository.findAll();
     }
 
-    // Obtener envío por ID
-    public Optional<EnvioEntity> getEnvioById(Long id) {
+public Optional<EnvioEntity> getEnvioById(Long id) {
         return envioRepository.findById(id);
     }
 
-    // Crear nuevo envío
-    public EnvioEntity createEnvio(EnvioEntity envio) {
+public EnvioEntity createEnvio(EnvioEntity envio) {
         return envioRepository.save(envio);
     }
 
-    // Actualizar envío existente
-    public EnvioEntity updateEnvio(Long id, EnvioEntity envio) {
+public EnvioEntity updateEnvio(Long id, EnvioEntity envio) {
         EnvioEntity envioExistente = envioRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Envío no encontrado con id: " + id));
-        
-        // Actualizar campos solo si no son nulos
-        if (envio.getDireccionEnvio() != null) {
+
+if (envio.getDireccionEnvio() != null) {
             envioExistente.setDireccionEnvio(envio.getDireccionEnvio());
         }
         if (envio.getTipoEnvio() != null) {
@@ -54,13 +49,11 @@ public class EnvioService {
         if (envio.getFechaEnvio() != null) {
             envioExistente.setFechaEnvio(envio.getFechaEnvio());
         }
-        // No permitir cambiar la compra asociada
-        
-        return envioRepository.save(envioExistente);
+
+return envioRepository.save(envioExistente);
     }
 
-    // Eliminar envío
-    public void deleteEnvio(Long id) {
+public void deleteEnvio(Long id) {
         if (!envioRepository.existsById(id)) {
             throw new RuntimeException("Envio no encontrado con el id: " + id);
         } if (id == null) {

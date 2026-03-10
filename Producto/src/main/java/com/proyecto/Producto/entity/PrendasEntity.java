@@ -1,6 +1,7 @@
-package com.proyecto.Producto.entity;
+﻿package com.proyecto.Producto.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,16 +30,26 @@ public class PrendasEntity {
 
     @Column(nullable= false, unique=true)
     private String nombre;
-    
+
     @Column(nullable=false)
-    private Double precio_Actual; 
+    private Double precio_Actual;
+
+@Column(nullable=true)
+    private String imagenUrl;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_categoria", nullable=false)
-    private CategoriaEntity categoria; //“Esta prenda TIENE/PERTENECE UNA categoría”
-                                       // usamos el objeto categoria entity porque ne Java modelamos objetos, no ids, eso se hace en terminos de BD
-    
-    // NO se modela OneToMany a ItemEntity porque ItemEntity está en otro microservicio (Compra)
-    // Los items que referencian esta prenda se consultan desde el microservicio Compra usando el prendaId
+    private CategoriaEntity categoria;
+
+@JsonProperty("categoriaId")
+    public Long getCategoriaId() {
+        return categoria != null ? categoria.getIdCategoria() : null;
+    }
+
+@JsonProperty("categoriaNombre")
+    public String getCategoriaNombre() {
+        return categoria != null ? categoria.getNombreCategoria() : null;
+    }
+
 }

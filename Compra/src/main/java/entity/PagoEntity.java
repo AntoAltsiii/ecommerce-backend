@@ -1,4 +1,4 @@
-package com.proyecto.Compra.entity;
+﻿package com.proyecto.Compra.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="tb_pagos")
 public class PagoEntity {
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPago;
 

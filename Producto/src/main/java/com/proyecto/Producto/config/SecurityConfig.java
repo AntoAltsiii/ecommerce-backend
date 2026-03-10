@@ -1,4 +1,4 @@
-package com.proyecto.Producto.config;
+﻿package com.proyecto.Producto.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Catálogo - LECTURA pública, ESCRITURA requiere ADMIN
+
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/prendas", "/api/prendas/**").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/categorias", "/api/categorias/**").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/prendas/**").hasRole("ADMIN")
@@ -24,14 +24,14 @@ public class SecurityConfig {
                 .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/categorias/**").hasRole("ADMIN")
                 .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/categorias/**").hasRole("ADMIN")
                 .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/categorias/**").hasRole("ADMIN")
-                // El resto requiere autenticación
+
                 .anyRequest().authenticated()
             )
-            // Validar JWT como Resource Server
+
             .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwt -> jwt.jwtAuthenticationConverter(new JwtAuthenticationConverter()))
             );
-        
+
         return http.build();
     }
 }

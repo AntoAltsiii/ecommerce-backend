@@ -1,4 +1,4 @@
-package com.proyecto.Producto.controller;
+﻿package com.proyecto.Producto.controller;
 
 import java.util.List;
 
@@ -19,13 +19,11 @@ import java.util.List;
 import com.proyecto.Producto.entity.CategoriaEntity;
 import com.proyecto.Producto.service.CategoriaService;
 
-@RestController //quiere decir que esta clase expone endpoints y devuelve datos, nada de vistas HTML (controller + Responsebody)
+@RestController
 @RequestMapping("/api/categorias")
 public class CategoriaController {
-    //responseEntity es para contorlar la respuesta HTTP (codigos de estado, headers, body), clase de java, HTTP 200 OK
-    //Body: { ... }
 
-    @Autowired
+@Autowired
     private CategoriaService categoriaService;
 
     @PostMapping

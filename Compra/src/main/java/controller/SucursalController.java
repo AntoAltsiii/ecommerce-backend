@@ -1,4 +1,4 @@
-package com.proyecto.Compra.controller;
+﻿package com.proyecto.Compra.controller;
 
 import java.util.List;
 
@@ -20,27 +20,24 @@ import com.proyecto.Compra.service.SucursalService;
 @RestController
 @RequestMapping("/api/sucursal")
 public class SucursalController {
-    
+
     @Autowired
     private SucursalService sucursalService;
 
-    // GET - Obtener todas las sucursales
-    @GetMapping
+@GetMapping
     public ResponseEntity<List<SucursalEntity>> obtenerTodasLasSucursales() {
         List<SucursalEntity> sucursales = sucursalService.obtenerTodasLasSucursales();
         return ResponseEntity.ok(sucursales);
     }
 
-    // GET - Obtener sucursal por ID
-    @GetMapping("/{id}")
+@GetMapping("/{id}")
     public ResponseEntity<SucursalEntity> getSucursalById(@PathVariable Long id) {
         return sucursalService.getSucursalById(id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST - Crear nueva sucursal
-    @PostMapping
+@PostMapping
     public ResponseEntity<SucursalEntity> createSucursal(@RequestBody SucursalEntity sucursal) {
         try {
             SucursalEntity nuevaSucursal = sucursalService.createSucursal(sucursal);
@@ -50,10 +47,9 @@ public class SucursalController {
         }
     }
 
-    // PUT - Actualizar sucursal existente
-    @PutMapping("/{id}")
+@PutMapping("/{id}")
     public ResponseEntity<SucursalEntity> updateSucursal(
-            @PathVariable Long id, 
+            @PathVariable Long id,
             @RequestBody SucursalEntity sucursalDetails) {
         try {
             SucursalEntity sucursalActualizada = sucursalService.updateSucursal(id, sucursalDetails);
@@ -63,8 +59,7 @@ public class SucursalController {
         }
     }
 
-    // DELETE - Eliminar sucursal
-    @DeleteMapping("/{id}")
+@DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSucursal(@PathVariable Long id) {
         try {
             sucursalService.deleteSucursal(id);

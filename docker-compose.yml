@@ -126,6 +126,20 @@ services:
     networks:
       - app-network
 
+  # Frontend React (Vite build → nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-app
+    ports:
+      - "3000:80"   # Accedé a la app en: http://localhost:3000
+    depends_on:
+      - gateway-service
+    networks:
+      - app-network
+    restart: unless-stopped
+
 volumes:
   postgres-data:
     driver: local

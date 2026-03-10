@@ -1,5 +1,4 @@
-
-package com.proyecto.Compra.dto;
+﻿package com.proyecto.Compra.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -17,17 +16,16 @@ public class UserLocationDTO {
     @Min(value = -90, message = "La latitud debe estar entre -90 y 90")
     @Max(value = 90, message = "La latitud debe estar entre -90 y 90")
     private Double latitude;
-    
+
     @NotNull(message = "La longitud es obligatoria")
     @Min(value = -180, message = "La longitud debe estar entre -180 y 180")
     @Max(value = 180, message = "La longitud debe estar entre -180 y 180")
     private Double longitude;
-    
-    // OPCIONAL: Información adicional de ubicación
-    private String ciudad;  // Ej: "Córdoba"
-    
-    private String pais;  // Ej: "Argentina"
-    
-    private String descripcion;  // Ej: "Mi casa", "Trabajo"
+
+private String ciudad;
+
+    private String pais;
+
+    private String descripcion;
 
 }

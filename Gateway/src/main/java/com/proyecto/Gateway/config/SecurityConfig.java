@@ -1,4 +1,4 @@
-package com.proyecto.Gateway.config;
+﻿package com.proyecto.Gateway.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,18 +11,19 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
 
 @Configuration
-@EnableWebFluxSecurity //esta linea dice intercepta todas las reuqest HTTP y aplcia seguridad web reactiva 
+@EnableWebFluxSecurity
 public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeExchange(auth -> auth
-                // Endpoints públicos (sin autenticación)
-                .pathMatchers("/", "/login**", "/oauth2/**", "/error", "/home").permitAll()
-                
-                // Catálogo de productos - LECTURA pública, ESCRITURA solo ADMIN
-                .pathMatchers(org.springframework.http.HttpMethod.GET, "/api/prendas", "/api/prendas/**").permitAll()
+
+.pathMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+
+.pathMatchers("/", "/login**", "/oauth2/**", "/error", "/home").permitAll()
+
+.pathMatchers(org.springframework.http.HttpMethod.GET, "/api/prendas", "/api/prendas/**").permitAll()
                 .pathMatchers(org.springframework.http.HttpMethod.GET, "/api/categorias", "/api/categorias/**").permitAll()
                 .pathMatchers(org.springframework.http.HttpMethod.POST, "/api/prendas/**").hasRole("ADMIN")
                 .pathMatchers(org.springframework.http.HttpMethod.PUT, "/api/prendas/**").hasRole("ADMIN")
@@ -30,13 +31,18 @@ public class SecurityConfig {
                 .pathMatchers(org.springframework.http.HttpMethod.POST, "/api/categorias/**").hasRole("ADMIN")
                 .pathMatchers(org.springframework.http.HttpMethod.PUT, "/api/categorias/**").hasRole("ADMIN")
                 .pathMatchers(org.springframework.http.HttpMethod.DELETE, "/api/categorias/**").hasRole("ADMIN")
-                
-                // Sucursales - lectura pública
-                .pathMatchers(org.springframework.http.HttpMethod.GET, "/api/sucursal", "/api/sucursal/**").permitAll()
-                .pathMatchers("/api/sucursal/**").hasRole("ADMIN")  // Escritura solo ADMIN
 
-                // Endpoints con roles - IMPORTANTE: incluir path base Y con /**
-                .pathMatchers("/api/usuarios", "/api/usuarios/**").hasRole("ADMIN")
+.pathMatchers(org.springframework.http.HttpMethod.GET, "/api/sucursal", "/api/sucursal/**").permitAll()
+                .pathMatchers("/api/sucursal/**").hasRole("ADMIN")
+
+.pathMatchers(org.springframework.http.HttpMethod.GET, "/api/usuarios").hasRole("ADMIN")
+                .pathMatchers(org.springframework.http.HttpMethod.GET, "/api/usuarios/email/**").hasAnyRole("CLIENTE", "ADMIN")
+                .pathMatchers(org.springframework.http.HttpMethod.GET, "/api/usuarios/**").hasRole("ADMIN")
+                .pathMatchers(org.springframework.http.HttpMethod.POST, "/api/usuarios", "/api/usuarios/**").hasAnyRole("CLIENTE", "ADMIN")
+                .pathMatchers(org.springframework.http.HttpMethod.PUT, "/api/usuarios/**").hasAnyRole("CLIENTE", "ADMIN")
+                .pathMatchers(org.springframework.http.HttpMethod.DELETE, "/api/usuarios/**").hasRole("ADMIN")
+
+.pathMatchers(org.springframework.http.HttpMethod.GET, "/api/stock", "/api/stock/**").authenticated()
                 .pathMatchers("/api/stock", "/api/stock/**").hasRole("ADMIN")
 
                 .pathMatchers("/api/compras", "/api/compras/**").hasAnyRole("CLIENTE", "ADMIN")
@@ -48,7 +54,7 @@ public class SecurityConfig {
 
                 .anyExchange().authenticated()
             )
-            // OAuth2 Login (Authorization Code + PKCE)
+
             .oauth2Login(oauth2 -> oauth2
                 .authenticationSuccessHandler(
                     (webFilterExchange, authentication) -> {
@@ -58,7 +64,7 @@ public class SecurityConfig {
                     }
                 )
             )
-            // OAuth2 Resource Server (validar JWT)
+
             .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
             );
